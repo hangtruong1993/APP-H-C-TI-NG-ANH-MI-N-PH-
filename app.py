@@ -6,135 +6,114 @@ st.set_page_config(
     page_icon="📚"
 )
 
-st.markdown("""
-<style>
-.card{
-background:white;
-padding:25px;
-border-radius:18px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-.title{
-font-size:42px;
-font-weight:800;
-color:#2563eb;
-}
-</style>
-""", unsafe_allow_html=True)
+st.title("EnglishMate AI")
 
-TENSES = [
-("Present Simple","S + V(s/es)","Thói quen, sự thật","I go to school every day."),
-("Present Continuous","S + am/is/are + V-ing","Đang xảy ra","She is reading a book."),
-("Present Perfect","S + have/has + V3","Kinh nghiệm, kết quả","I have finished my homework."),
-("Present Perfect Continuous","S + have/has been + V-ing","Nhấn mạnh quá trình","I have been studying for 2 hours."),
-("Past Simple","S + V2/ed","Đã xảy ra trong quá khứ","I visited Hanoi."),
-("Past Continuous","S + was/were + V-ing","Đang xảy ra trong quá khứ","I was watching TV."),
-("Past Perfect","S + had + V3","Xảy ra trước quá khứ","She had left before I came."),
-("Past Perfect Continuous","S + had been + V-ing","Quá trình trước quá khứ","He had been working."),
-("Future Simple","S + will + V","Tương lai","I will help you."),
-("Future Continuous","S + will be + V-ing","Đang diễn ra tương lai","I will be studying."),
-("Future Perfect","S + will have + V3","Hoàn thành trước tương lai","I will have finished."),
-("Future Perfect Continuous","S + will have been + V-ing","Nhấn mạnh thời gian tương lai","I will have been learning English.")
-]
-
-VOCAB = {
-"A1":[("apple","quả táo"),("school","trường học"),("teacher","giáo viên")],
-"A2":[("journey","chuyến đi"),("healthy","khỏe mạnh")],
-"B1":[("achievement","thành tựu"),("experience","kinh nghiệm")],
-"B2":[("significant","quan trọng")],
-"C1":[("comprehensive","toàn diện")]
-}
-
-IRREGULAR = [
-["go","went","gone","đi"],
-["eat","ate","eaten","ăn"],
-["write","wrote","written","viết"],
-["see","saw","seen","nhìn thấy"],
-["take","took","taken","lấy"]
-]
-
-QUIZ = [
-{"q":"She ___ English every day.","a":["study","studies","studying"],"c":"studies"},
-{"q":"I ___ football yesterday.","a":["play","played","playing"],"c":"played"},
-{"q":"They have ___ dinner.","a":["eat","ate","eaten"],"c":"eaten"}
-]
-
-if "score" not in st.session_state:
-    st.session_state.score = 0
+st.write("Smart English Learning Platform")
 
 st.sidebar.title("EnglishMate AI")
 
 menu = st.sidebar.radio(
     "Chức năng",
-    ["Dashboard","Grammar","Vocabulary","Irregular Verb","Test","Writing","Listening","Speaking"]
+    [
+        "Dashboard",
+        "Grammar - 12 Tenses",
+        "Vocabulary",
+        "Irregular Verb",
+        "Test",
+        "Writing",
+        "Listening",
+        "Speaking"
+    ]
 )
 
-level = st.sidebar.selectbox(
-    "Level",
-    ["A1","A2","B1","B2","C1"]
-)
+TENSES = [
+("Present Simple","S + V(s/es)","I go to school every day."),
+("Present Continuous","S + am/is/are + V-ing","She is reading."),
+("Present Perfect","S + have/has + V3","I have finished."),
+("Present Perfect Continuous","S + have/has been + V-ing","I have been studying."),
+("Past Simple","S + V2/ed","I visited Hanoi."),
+("Past Continuous","S + was/were + V-ing","I was studying."),
+("Past Perfect","S + had + V3","She had left."),
+("Past Perfect Continuous","S + had been + V-ing","He had been working."),
+("Future Simple","S + will + V","I will go."),
+("Future Continuous","S + will be + V-ing","I will be studying."),
+("Future Perfect","S + will have + V3","I will have finished."),
+("Future Perfect Continuous","S + will have been + V-ing","I will have been learning.")
+]
+
+QUIZ = {
+"A1":[
+("She ___ a student.",["is","are","am","be"],"is"),
+("I ___ to school every day.",["go","goes","going","gone"],"go")
+],
+"A2":[
+("I have ___ English for 3 years.",["learn","learned","learning","learns"],"learned")
+],
+"B1":[
+("If I ___ you, I would study harder.",["am","were","be","was"],"were")
+],
+"B2":[
+("By next year I ___ my course.",["finish","finished","will have finished","finishing"],"will have finished"),
+],
+"C1":[
+("Had I known, I ___ earlier.",["come","came","would have come","coming"],"would have come")
+]
+}
 
 if menu == "Dashboard":
-    st.markdown("""
-    <div class="card">
-    <div class="title">EnglishMate AI</div>
-    <p>Smart English Learning Platform</p>
-    Grammar • Vocabulary • Listening • Speaking
-    </div>
-    """, unsafe_allow_html=True)
+    st.success("Learn - Practice - Improve")
 
-    a,b,c = st.columns(3)
-    a.metric("Vocabulary","520")
-    b.metric("Tests","50")
-    c.metric("Score",st.session_state.score)
-
-elif menu == "Grammar":
-    st.title("📘 12 English Tenses")
-    for t in TENSES:
-        with st.expander(t[0]):
-            st.write("**Công thức:**",t[1])
-            st.write("**Cách dùng:**",t[2])
-            st.success(t[3])
+elif menu == "Grammar - 12 Tenses":
+    st.header("📘 12 English Tenses")
+    for name, formula, ex in TENSES:
+        with st.expander(name):
+            st.code(formula)
+            st.write(ex)
 
 elif menu == "Vocabulary":
-    st.title("📚 Vocabulary")
-    search = st.text_input("Tìm từ")
-    for w,m in VOCAB[level]:
-        if search.lower() in w.lower():
-            st.info(f"{w} - {m}")
+    st.header("📚 Vocabulary")
+    st.write("A1 - C1 Vocabulary system")
 
 elif menu == "Irregular Verb":
-    st.title("🔄 Irregular Verbs")
-    st.table(IRREGULAR)
+    st.header("🔄 Irregular Verbs")
+    st.table([
+        ["go","went","gone"],
+        ["eat","ate","eaten"],
+        ["write","wrote","written"]
+    ])
 
 elif menu == "Test":
-    st.title("📝 English Test")
-    score = 0
-    answers=[]
-    for i,q in enumerate(QUIZ):
-        ans=st.radio(q["q"],q["a"],key=i)
+    st.header("📝 English Test")
+    level = st.selectbox("Level", list(QUIZ.keys()))
+    answers = []
+
+    for i,q in enumerate(QUIZ[level]):
+        ans = st.radio(
+            q[0],
+            ["A. "+x for x in q[1]],
+            key=i
+        )
         answers.append(ans)
-    if st.button("Chấm điểm"):
-        for a,q in zip(answers,QUIZ):
-            if a==q["c"]:
-                score+=1
-        st.session_state.score=score
-        st.success(f"Kết quả: {score}/{len(QUIZ)}")
+
+    if st.button("Nộp bài"):
+        score = 0
+        for ans,q in zip(answers, QUIZ[level]):
+            if ans == "A. "+q[2]:
+                score += 1
+        st.success(f"Kết quả: {score}/{len(QUIZ[level])}")
 
 elif menu == "Writing":
-    st.title("✍ Writing")
-    text=st.text_area("Viết đoạn văn")
+    st.header("✍ Writing")
+    text = st.text_area("Write your essay")
     if text:
-        st.info(f"Số từ: {len(text.split())}")
+        st.info(f"Words: {len(text.split())}")
 
 elif menu == "Listening":
-    st.title("🎧 Listening")
+    st.header("🎧 Listening")
     st.write("Anna is a student. She likes reading books.")
-    st.radio("What does Anna like?",["Reading books","Football","Cooking"])
 
 elif menu == "Speaking":
-    st.title("🎤 Speaking")
-    st.write("Record your English speaking")
-    audio=st.audio_input("Ghi âm")
+    st.header("🎤 Speaking")
+    audio = st.audio_input("Record your voice")
     if audio:
         st.audio(audio)
