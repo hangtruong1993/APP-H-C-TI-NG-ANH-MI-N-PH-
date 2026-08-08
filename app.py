@@ -6,8 +6,22 @@ import streamlit as st
 # =====================================================
 
 st.set_page_config(
-    page_title="EnglishMate AI"
+    page_title="EnglishMate AI",
+    page_icon="📚",
+    layout="centered"
 )
+
+
+# =====================================================
+# SESSION SCORE
+# =====================================================
+
+if "score" not in st.session_state:
+    st.session_state.score = 0
+
+if "total_test" not in st.session_state:
+    st.session_state.total_test = 0
+
 
 
 # =====================================================
@@ -28,14 +42,15 @@ st.markdown(
 background:white;
 padding:25px;
 border-radius:20px;
-box-shadow:0px 5px 20px rgba(0,0,0,0.08);
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+margin-bottom:20px;
 
 }
 
 
 .title{
 
-font-size:42px;
+font-size:45px;
 font-weight:800;
 color:#2563eb;
 
@@ -49,6 +64,14 @@ color:#64748b;
 
 }
 
+
+.box{
+
+background:#eff6ff;
+padding:15px;
+border-radius:15px;
+
+}
 
 </style>
 
@@ -68,7 +91,7 @@ GRAMMAR={
 "A1":[
 
 {
-"name":"Present Simple - Hiện tại đơn",
+"name":"Present Simple",
 "formula":"S + V(s/es)",
 "use":"Thói quen, sự thật",
 "example":"I go to school every day."
@@ -138,43 +161,33 @@ GRAMMAR={
 VOCAB={
 
 "A1":[
-
 ("apple","quả táo"),
 ("book","quyển sách"),
 ("teacher","giáo viên"),
 ("school","trường học"),
 ("friend","bạn bè")
-
 ],
 
 "A2":[
-
 ("journey","chuyến đi"),
 ("healthy","khỏe mạnh"),
 ("environment","môi trường")
-
 ],
 
 "B1":[
-
 ("achievement","thành tựu"),
 ("experience","kinh nghiệm"),
 ("opportunity","cơ hội")
-
 ],
 
 "B2":[
-
 ("significant","quan trọng"),
 ("perspective","góc nhìn")
-
 ],
 
 "C1":[
-
 ("comprehensive","toàn diện"),
 ("controversial","gây tranh cãi")
-
 ]
 
 }
@@ -204,17 +217,22 @@ QUIZ={
 {
 "q":"She ___ a student.",
 "a":["am","is","are"],
-"c":"is"
+"answer":"is"
 },
 
 {
 "q":"I ___ to school every day.",
 "a":["go","goes","going"],
-"c":"go"
+"answer":"go"
+},
+
+{
+"q":"They ___ football now.",
+"a":["play","are playing","played"],
+"answer":"are playing"
 }
 
 ],
-
 
 
 "A2":[
@@ -222,11 +240,10 @@ QUIZ={
 {
 "q":"I have ___ this book.",
 "a":["read","reading","reads"],
-"c":"read"
+"answer":"read"
 }
 
 ],
-
 
 
 "B1":[
@@ -234,11 +251,10 @@ QUIZ={
 {
 "q":"If I ___ rich, I would travel.",
 "a":["am","were","be"],
-"c":"were"
+"answer":"were"
 }
 
 ],
-
 
 
 "B2":[
@@ -246,11 +262,10 @@ QUIZ={
 {
 "q":"I ___ finished by tomorrow.",
 "a":["will have","have","had"],
-"c":"will have"
+"answer":"will have"
 }
 
 ],
-
 
 
 "C1":[
@@ -258,7 +273,7 @@ QUIZ={
 {
 "q":"Had I known, I ___ earlier.",
 "a":["come","would have come","came"],
-"c":"would have come"
+"answer":"would have come"
 }
 
 ]
@@ -273,14 +288,12 @@ QUIZ={
 
 
 st.sidebar.title(
-"EnglishMate AI"
+"📚 EnglishMate AI"
 )
 
 
 level=st.sidebar.selectbox(
-
-"Trình độ",
-
+"Choose Level",
 [
 "A1",
 "A2",
@@ -288,24 +301,21 @@ level=st.sidebar.selectbox(
 "B2",
 "C1"
 ]
-
 )
 
 
-
 menu=st.sidebar.radio(
-
-"Học tập",
+"Learning",
 
 [
-"Dashboard",
-"Grammar",
-"Vocabulary",
-"Irregular Verb",
-"Placement Test",
-"Writing",
-"Listening",
-"Speaking"
+"🏠 Dashboard",
+"📘 Grammar",
+"📚 Vocabulary",
+"🔄 Irregular Verb",
+"📝 Test",
+"✍ Writing",
+"🎧 Listening",
+"🎤 Speaking"
 ]
 
 )
@@ -317,34 +327,26 @@ menu=st.sidebar.radio(
 # =====================================================
 
 
-if menu=="Dashboard":
+if menu=="🏠 Dashboard":
 
 
     st.markdown(
-
 """
 <div class="card">
 
 <div class="title">
-
 EnglishMate AI
-
 </div>
 
 <p class="subtitle">
-
 Smart English Learning Platform
-
 </p>
 
-Grammar • Vocabulary • Listening • Speaking • Writing
+Grammar • Vocabulary • Listening • Speaking
 
 </div>
-
 """,
-
 unsafe_allow_html=True
-
 )
 
 
@@ -353,25 +355,33 @@ unsafe_allow_html=True
 
 
     c1.metric(
-    "Vocabulary",
-    "520"
+        "Vocabulary",
+        "520"
     )
-
 
     c2.metric(
-    "Tests",
-    "50"
+        "Tests",
+        st.session_state.total_test
+    )
+
+    c3.metric(
+        "Score",
+        st.session_state.score
     )
 
 
-    c3.metric(
-    "Progress",
-    "75%"
+    st.subheader(
+        "Learning Progress"
     )
 
 
     st.progress(
-    0.75
+        0.75
+    )
+
+
+    st.success(
+        "Keep learning every day!"
     )
 
 
@@ -381,11 +391,11 @@ unsafe_allow_html=True
 # =====================================================
 
 
-elif menu=="Grammar":
+elif menu=="📘 Grammar":
 
 
     st.title(
-    "Grammar"
+        "📘 Grammar"
     )
 
 
@@ -394,15 +404,15 @@ elif menu=="Grammar":
         with st.expander(item["name"]):
 
             st.code(
-            item["formula"]
+                item["formula"]
             )
 
             st.write(
-            item["use"]
+                item["use"]
             )
 
             st.success(
-            item["example"]
+                item["example"]
             )
 
 
@@ -412,25 +422,26 @@ elif menu=="Grammar":
 # =====================================================
 
 
-elif menu=="Vocabulary":
+elif menu=="📚 Vocabulary":
 
 
     st.title(
-    "Vocabulary"
+        "📚 Vocabulary"
     )
 
 
     search=st.text_input(
-    "Search"
+        "Search word"
     )
 
 
     for word,meaning in VOCAB[level]:
 
+
         if search.lower() in word.lower():
 
             st.info(
-            f"{word} : {meaning}"
+                f"{word} : {meaning}"
             )
 
 
@@ -440,16 +451,16 @@ elif menu=="Vocabulary":
 # =====================================================
 
 
-elif menu=="Irregular Verb":
+elif menu=="🔄 Irregular Verb":
 
 
     st.title(
-    "Irregular Verbs"
+        "🔄 Irregular Verb"
     )
 
 
     st.table(
-    IRREGULAR
+        IRREGULAR
     )
 
 
@@ -459,12 +470,15 @@ elif menu=="Irregular Verb":
 # =====================================================
 
 
-elif menu=="Placement Test":
+elif menu=="📝 Test":
 
 
     st.title(
-    "English Placement Test"
+        "📝 Placement Test"
     )
+
+
+    questions=QUIZ[level]
 
 
     score=0
@@ -473,40 +487,68 @@ elif menu=="Placement Test":
     answers=[]
 
 
-    for i,q in enumerate(QUIZ[level]):
+    for i,q in enumerate(questions):
 
         ans=st.radio(
-
-        q["q"],
-
-        q["a"],
-
-        key=i
-
+            q["q"],
+            q["a"],
+            key=i
         )
-
 
         answers.append(ans)
 
 
 
-    if st.button("Submit"):
+    if st.button(
+        "Submit Test"
+    ):
 
 
         for ans,q in zip(
-        answers,
-        QUIZ[level]
+            answers,
+            questions
         ):
 
-            if ans==q["c"]:
+            if ans==q["answer"]:
                 score+=1
 
 
-        st.success(
 
-        f"Score: {score}/{len(QUIZ[level])}"
+        st.session_state.score=score
 
+        st.session_state.total_test+=1
+
+
+
+        percent=int(
+            score/len(questions)*100
         )
+
+
+        st.success(
+            f"Result: {score}/{len(questions)} ({percent}%)"
+        )
+
+
+        if percent>=80:
+
+            st.balloons()
+
+            st.info(
+                "Excellent!"
+            )
+
+        elif percent>=50:
+
+            st.warning(
+                "Good job. Keep practicing!"
+            )
+
+        else:
+
+            st.error(
+                "Need more practice!"
+            )
 
 
 
@@ -515,38 +557,41 @@ elif menu=="Placement Test":
 # =====================================================
 
 
-elif menu=="Writing":
+elif menu=="✍ Writing":
 
 
     st.title(
-    "Writing Practice"
+        "✍ Writing Practice"
     )
 
 
     topic=st.selectbox(
+        "Topic",
+        [
+        "Introduce yourself",
+        "My hobby",
+        "Technology",
+        "Future career"
+        ]
+    )
 
-    "Topic",
 
-    [
-    "Introduce yourself",
-    "My hobby",
-    "Technology",
-    "Future career"
-    ]
-
+    st.info(
+        topic
     )
 
 
     text=st.text_area(
-    "Write here",
-    height=200
+        "Write your essay",
+        height=200
     )
 
 
     if text:
 
-        st.info(
-        f"Words: {len(text.split())}"
+        st.metric(
+            "Word count",
+            len(text.split())
         )
 
 
@@ -556,16 +601,15 @@ elif menu=="Writing":
 # =====================================================
 
 
-elif menu=="Listening":
+elif menu=="🎧 Listening":
 
 
     st.title(
-    "Listening Practice"
+        "🎧 Listening"
     )
 
 
     st.write(
-
 """
 Anna is a student.
 
@@ -575,20 +619,16 @@ Question:
 
 What does Anna like?
 """
-
 )
 
 
     st.radio(
-
-    "Answer",
-
-    [
-    "Reading books",
-    "Football",
-    "Cooking"
-    ]
-
+        "Answer",
+        [
+        "Reading books",
+        "Football",
+        "Cooking"
+        ]
     )
 
 
@@ -598,37 +638,36 @@ What does Anna like?
 # =====================================================
 
 
-elif menu=="Speaking":
+elif menu=="🎤 Speaking":
 
 
     st.title(
-    "Speaking Practice"
+        "🎤 Speaking"
     )
 
 
     st.info(
-
 """
 Topic:
 
 Introduce yourself.
 
 Speak for 1 minute.
-
 """
-
 )
 
 
     audio=st.audio_input(
-    "Record voice"
+        "Record your voice"
     )
 
 
     if audio:
 
-        st.audio(audio)
+        st.audio(
+            audio
+        )
 
         st.success(
-        "Completed"
+            "Recording completed!"
         )
