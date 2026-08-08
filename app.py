@@ -7,7 +7,8 @@ import streamlit as st
 
 st.set_page_config(
     page_title="EnglishMate AI",
-   
+    page_icon="🇬🇧",
+    layout="wide"
 )
 
 
@@ -361,7 +362,7 @@ if menu=="🏠 Dashboard":
 
 <p class="subtitle">
 
-Nền tảng học tiếng Anh tương tác
+Nền tảng học tiếng Anh tương tác miễn phí
 A1 → C1
 
 </p>
