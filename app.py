@@ -1,10 +1,6 @@
 import streamlit as st
 
 
-# =====================================================
-# CONFIG
-# =====================================================
-
 st.set_page_config(
     page_title="EnglishMate AI",
     page_icon="🇬🇧",
